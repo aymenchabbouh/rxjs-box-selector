@@ -1,5 +1,9 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideExperimentalZonelessChangeDetection } from '@angular/core';
 
+/**
+ * Application-level configuration.
+ * Using zoneless change detection as required by the spec.
+ */
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true })]
+  providers: [provideExperimentalZonelessChangeDetection()]
 };
