@@ -66,3 +66,13 @@
 .box.active:hover .box-body {
   background: #d1fae5;
 }
+
+.box-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0.25rem;
+  background: #e5e7eb;
+  color: #6b7280;
+}

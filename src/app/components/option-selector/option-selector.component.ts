@@ -38,4 +38,10 @@ export class OptionSelectorComponent {
   onOptionClick(optionId: string): void {
     this.stateService.selectOption(optionId);
   }
+  getColumnLimit(totalOptions: number): number {
+    switch (true) {
+      case totalOptions <= 20: return Math.ceil(totalOptions / 2);
+      default: return 20;
+    }
+  }
 }
