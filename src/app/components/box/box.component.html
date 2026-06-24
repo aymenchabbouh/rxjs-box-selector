@@ -1,0 +1,17 @@
+<!-- Box with numbered tab on top and value display below -->
+<div
+  [class]="'box' + ((isActive$ | async) ? ' active' : '')"
+  (click)="onBoxClick()"
+>
+  <!-- Numbered tab header -->
+  <div class="box-tab">{{ boxId }}</div>
+
+  <!-- Value area -->
+  <div class="box-body">
+    @if (selectedOption$ | async; as option) {
+      <span class="box-value">{{ option.label }}</span>
+    } @else {
+      <span class="box-placeholder">Select element</span>
+    }
+  </div>
+</div>
