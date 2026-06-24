@@ -73,8 +73,8 @@ export class BoxStateService {
     if (current.activeBoxId === null) return;
 
     const boxId = current.activeBoxId;
-    // Auto-advance: move to next box, or deselect if last box
-    const nextBoxId = boxId < TOTAL_BOXES ? boxId + 1 : null;
+    // Auto-advance: move to next box. If last box, stay on it (keep options visible)
+    const nextBoxId = boxId < TOTAL_BOXES ? boxId + 1 : boxId;
 
     this.updateState({
       selections: { ...current.selections, [boxId]: optionId },
@@ -100,13 +100,17 @@ export class BoxStateService {
   private loadState(): BoxState {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return JSON.parse(raw);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Only restore selections, NOT activeBoxId — options panel should be closed on refresh
+        return { selections: parsed.selections ?? {}, activeBoxId: null };
+      }
     } catch { /* ignore corrupt data */ }
     return { selections: {}, activeBoxId: null };
   }
 
-  /** Save state to localStorage */
+  /** Save only selections to localStorage (activeBoxId is session-only) */
   private saveState(state: BoxState): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ selections: state.selections }));
   }
 }
