@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { combineLatestWith, map } from 'rxjs/operators';
 import { BoxStateService } from '../../box-state.service';
 import { OPTION_CATEGORIES } from '../../models';
 
@@ -27,10 +26,8 @@ export class OptionSelectorComponent {
   activeBoxId$ = this.stateService.activeBoxId$;
 
   /** Currently selected option ID for the active box (to highlight it) */
-  currentOptionId$ = combineLatest([
-    this.stateService.activeBoxId$,
-    this.stateService.selections$
-  ]).pipe(
+  currentOptionId$ = this.stateService.activeBoxId$.pipe(
+    combineLatestWith(this.stateService.selections$),
     map(([activeId, selections]) => {
       if (activeId === null) return null;
       return selections[activeId] ?? null;
