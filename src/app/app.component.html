@@ -24,7 +24,7 @@
   <!-- Remove all button -->
   @if (hasSelections$ | async) {
     <div class="actions">
-      <button class="btn-remove" (click)="onRemoveAll()">Remove All Selections</button>
+      <button class="btn-remove" (click)="removeAll$.next()">Remove All Selections</button>
     </div>
   }
 </div>

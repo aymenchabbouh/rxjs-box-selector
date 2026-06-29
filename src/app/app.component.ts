@@ -1,6 +1,8 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, DestroyRef } from '@angular/core';
 import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BoxStateService } from './box-state.service';
 import { BoxComponent } from './components/box/box.component';
 import { OptionSelectorComponent } from './components/option-selector/option-selector.component';
@@ -9,6 +11,7 @@ import { TOTAL_BOXES } from './models';
 /**
  * Root component — horizontal box row with total value and option selector below.
  * All state accessed through BoxStateService.
+ * User actions are modeled as observable streams (removeAll$).
  */
 @Component({
   selector: 'app-root',
@@ -20,6 +23,7 @@ import { TOTAL_BOXES } from './models';
 })
 export class AppComponent {
   private stateService = inject(BoxStateService);
+  private destroyRef = inject(DestroyRef);
 
   /** Array [1..10] for rendering boxes */
   boxIds = Array.from({ length: TOTAL_BOXES }, (_, i) => i + 1);
@@ -35,8 +39,15 @@ export class AppComponent {
   /** Sum of all selected option values */
   totalValue$ = this.stateService.totalValue$;
 
-  /** Clear everything */
-  onRemoveAll(): void {
-    this.stateService.removeAll();
+  /** Stream of "remove all" button click events — modeled as an observable per spec */
+  readonly removeAll$ = new Subject<void>();
+
+  constructor() {
+    // Wire remove-all click stream to state service (auto-cleanup on destroy)
+    this.removeAll$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
+      this.stateService.removeAll();
+    });
   }
 }

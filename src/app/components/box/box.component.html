@@ -1,5 +1,5 @@
 <!-- Box with numbered tab on top and value display below -->
-<div [class]="'box' + ((isActive$ | async) ? ' active' : '')" (click)="onBoxClick()">
+<div [class]="'box' + ((isActive$ | async) ? ' active' : '')" (click)="boxClick$.next()">
   <!-- Numbered tab header -->
   <div class="box-tab">{{ boxId }}</div>
   @let option = selectedOption$ | async;

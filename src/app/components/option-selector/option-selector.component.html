@@ -8,7 +8,7 @@
 
       @for (option of category.options; track option.id) {
       <button type="button" [class]="'option-btn' + ((currentOptionId$ | async) === option.id ? ' selected' : '')"
-        (click)="onOptionClick(option.id)">
+        (click)="optionClick$.next(option.id)">
         {{ option.label }}
       </button>
       }
