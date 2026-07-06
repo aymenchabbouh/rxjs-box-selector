@@ -4,7 +4,7 @@
   <div class="category">
     <span class="category-name">{{ category.name }}:</span>
     <div class="category-options"
-      [style.grid-template-columns]="'repeat(' + getColumnLimit(category.options.length) + ', 1fr)'">
+      [style.grid-template-columns]="category.options.length | gridColumns">
 
       @for (option of category.options; track option.id) {
       <button type="button" [class]="'option-btn' + ((currentOptionId$ | async) === option.id ? ' selected' : '')"

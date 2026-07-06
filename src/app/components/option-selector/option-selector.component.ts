@@ -3,6 +3,7 @@ import { AsyncPipe } from '@angular/common';
 import { combineLatestWith, map } from 'rxjs/operators';
 import { BoxStateService } from '../../box-state.service';
 import { OPTION_CATEGORIES } from '../../models';
+import { GridColumnsPipe } from '../../pipes/grid-columns.pipe';
 
 /**
  * Displays categorized options for the currently active box.
@@ -10,7 +11,7 @@ import { OPTION_CATEGORIES } from '../../models';
  */
 @Component({
   selector: 'app-option-selector',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, GridColumnsPipe],
   templateUrl: './option-selector.component.html',
   styleUrl: './option-selector.component.css'
 })
@@ -35,12 +36,5 @@ export class OptionSelectorComponent {
   /** When user picks an option */
   onOptionClick(optionId: string): void {
     this.stateService.selectOption(optionId);
-  }
-
-  getColumnLimit(totalOptions: number): number {
-    switch (true) {
-      case totalOptions <= 20: return Math.ceil(totalOptions / 2);
-      default: return 20;
-    }
   }
 }
